@@ -1,9 +1,10 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import { login } from "./api.ts";
-import { useState } from "react";
-import { FullScreenSpinner } from "../../components/FullScreenSpinner.tsx";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import {Button, Label, TextInput} from "flowbite-react";
+import {login} from "./api.ts";
+import {useState} from "react";
+import {FullScreenSpinner} from "../../components/FullScreenSpinner.tsx";
+import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {User} from "../../types/User.ts";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -20,7 +21,14 @@ const LoginPage = () => {
                 if (r.status != 200 || !r.data.data) {
                     toast.error("Tên đăng nhập hoặc mật khẩu không đúng!");
                 } else {
-                    navigate("/home");
+                    const user = r.data.data as User;
+                    if (user.userRole == "Admin") {
+                        navigate("/admin");
+                    } else {
+                        navigate("/");
+                    }
+
+
                     toast.success("Đăng nhập thành công");
                 }
             })
@@ -35,12 +43,12 @@ const LoginPage = () => {
 
     return (
         <div className={`w-full h-screen flex`}>
-            <FullScreenSpinner loading={isLoading} />
+            <FullScreenSpinner loading={isLoading}/>
             <div className="space-y-6 h-fit w-80 m-auto">
                 <form onSubmit={onSubmit}>
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="userName" value="Tên đăng nhập" />
+                            <Label htmlFor="userName" value="Tên đăng nhập"/>
                         </div>
                         <TextInput
                             name="userName"
@@ -50,9 +58,9 @@ const LoginPage = () => {
                     </div>
                     <div>
                         <div className="mb-2 block">
-                            <Label htmlFor="password" value="Mật khẩu " />
+                            <Label htmlFor="password" value="Mật khẩu "/>
                         </div>
-                        <TextInput name="password" id="password" type="password" required />
+                        <TextInput name="password" id="password" type="password" required/>
                     </div>
                     <div className="">
                         <a
@@ -66,7 +74,7 @@ const LoginPage = () => {
                         </a>
                     </div>
                     <div className="w-full">
-                        <Button  type={"submit"} className={`m-auto w-full`}>
+                        <Button type={"submit"} className={`m-auto w-full`}>
                             Đăng nhập
                         </Button>
                     </div>

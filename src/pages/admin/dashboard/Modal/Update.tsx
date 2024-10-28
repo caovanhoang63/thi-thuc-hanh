@@ -1,34 +1,60 @@
 import {Button, Label, Modal, TextInput} from "flowbite-react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {updateProduct} from "../api.ts";
 import {toast} from "react-toastify";
+import {Product} from "../../../../types/Product.ts";
 
-export const  UpdateModal = (prop : {
-    id?: number,
+export const UpdateModal = (prop: {
+    product?: Product,
     open: boolean,
-    close: () => void
+    close: () => void,
+    onComplete : (id : number, product  :Product) => void
 }) => {
+
 
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
     const [image, setImage] = useState<string>("");
-
+    // Set initial values when the component mounts or when `prop.product` changes
+    useEffect(() => {
+        if (prop.product) {
+            setName(prop.product.name || "");
+            setDescription(prop.product.description || "");
+            setPrice(prop.product.price || 0);
+            setImage(prop.product.image || "");
+        }
+    }, [prop.product]);
 
     const create = () => {
-        if (!prop.id) {
-            return
+        if (!prop.product?.id) {
+            return;
         }
-        updateProduct(prop.id ,{
+        const id = prop.product?.id
+        updateProduct(prop.product?.id, {
                 image: image,
                 price: price,
-                name :name,
-                description : description
+                name: name,
+                description: description
             }
         ).then((result) => {
             if (result.status === 200) {
-                toast.success("Product created!");
+                toast.success("cập nhật thành công ");
+                prop.onComplete(id,{
+                    id : prop.product?.id,
+                    description: description,
+                    image: image,
+                    name: name,
+                    price: price
+
+                })
+                prop.close();
+            } else {
+                toast.error("cập nhật thất bại ");
             }
+
+        }).catch(() => {
+            toast.error("cập nhật thất bại ");
         })
     }
 
@@ -73,7 +99,7 @@ export const  UpdateModal = (prop : {
                         </div>
 
                         <div className="w-full">
-                            <Button type={"submit"} onClick={create}>  Thêm</Button>
+                            <Button type={"submit"} onClick={create}> Cập nhật</Button>
                         </div>
                     </div>
                 </Modal.Body>

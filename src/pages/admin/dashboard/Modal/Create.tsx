@@ -2,12 +2,14 @@ import {Button, Label, Modal, TextInput} from "flowbite-react";
 import {useState} from "react";
 import {createProduct} from "../api.ts";
 import {toast} from "react-toastify";
+import {Product} from "../../../../types/Product.ts";
 
-export const  CreateModal = (prop : {
+export const CreateModal = (prop: {
     open: boolean,
-    close: () => void
+    close: () => void,
+    onComplete: (product: Product) => void,
 }) => {
- 
+
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
@@ -18,12 +20,20 @@ export const  CreateModal = (prop : {
         createProduct({
                 image: image,
                 price: price,
-                name :name,
-                description : description
+                name: name,
+                description: description
             }
         ).then((result) => {
             if (result.status === 200) {
                 toast.success("Product created!");
+                prop.onComplete({
+                    id : result.data.data,
+                    description: description,
+                    image: image,
+                    name: name,
+                    price: price
+                })
+                prop.close()
             }
         })
     }
@@ -70,7 +80,7 @@ export const  CreateModal = (prop : {
                         </div>
 
                         <div className="w-full">
-                            <Button type={"submit"} onClick={create}>  Thêm</Button>
+                            <Button type={"submit"} onClick={create}> Thêm</Button>
                         </div>
                     </div>
                 </Modal.Body>

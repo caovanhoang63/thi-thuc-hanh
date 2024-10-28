@@ -36,7 +36,7 @@ const RegisterPage = () => {
 
     return (
         <div className={`w-full h-screen flex`}>
-            <FullScreenSpinner loading={isLoading} />
+            <FullScreenSpinner loading={isLoading}/>
             <div className="space-y-6 h-fit w-80 m-auto">
                 <form onSubmit={onSubmit}>
                     <div>

@@ -1,12 +1,12 @@
 import axios from "axios";
-import { BASE_URL } from "./utils/contants.ts";
+import {BASE_URL} from "./utils/contants.ts";
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  timeout: 7000,
-  headers: {
-    "Content-type": "application/json"
-  }
+    baseURL: BASE_URL,
+    timeout: 7000,
+    headers: {
+        "Content-type": "application/json"
+    }
 });
 //
 // axiosInstance.interceptors.response.use(
