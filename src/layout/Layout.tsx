@@ -1,9 +1,10 @@
 import "../index.css";
 import { Navbar, NavbarBrand } from "flowbite-react";
 import { SideBar } from "./SideBar";
-import { Outlet } from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 
 const RootLayout = () => {
+    const navigate = useNavigate();
   return (
     <div>
       <header>
@@ -17,6 +18,11 @@ const RootLayout = () => {
               height={66}
             />
           </NavbarBrand>
+            <div>
+                <a className={"cursor-pointer"} onClick={() => {
+                    navigate("/login");
+                }}> Đăng nhập/đăng ký </a>
+            </div>
         </Navbar>
       </header>
       <div className={`flex w-full h-full`}>

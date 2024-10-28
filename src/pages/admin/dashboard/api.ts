@@ -5,7 +5,6 @@ export const getProduct = () => {
     return axiosInstance.get("/products");
 };
 
-
 export const createProduct = (product: Product) => {
     return axiosInstance.post("/products",product);
 }
